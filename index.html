@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Princesa</title>
+    <link rel="icon" href="Gato.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 182, 193, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #6f42c1;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        p, li {
+            color: #495057;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .cat-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: block;
+            border: 5px solid #ff69b4;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .cat-image:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .continue-btn {
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #ff69b4;
+        }
+
+        .options {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .option {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            border-color: #ff69b4;
+            background: #fff0f5;
+        }
+
+        .option input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .results {
+            display: none;
+            background: #e7f3ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 5px;
+        }
+
+        .heart {
+            color: #ff69b4;
+            font-size: 1.5em;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .cat-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <!-- Tela inicial -->
+            <div id="intro" class="screen">
+                <h1>Olá querida princesa! <span class="heart">💖</span></h1>
+                <p>Apenas te informando que este site é para:</p>
+                <ul>
+                    <li>saber sobre sua vida pessoal (já que a gente namora e tals)</li>
+                </ul>
+                <img src="fotodegatofofo.png" alt="Gato fofo" class="cat-image">
+                <button class="continue-btn" onclick="showInstructions()">Aperte aqui para continuar</button>
+            </div>
+
+            <!-- Tela de instruções -->
+            <div id="instructions" class="screen" style="display: none;">
+                <h2>Perguntas:</h2>
+                <ul>
+                    <li>Todas as perguntas são opcionais, no caso você responde o que você quiser</li>
+                    <li><strong>(Mas tem que responder pelo menos 7 perguntas).</strong></li>
+                    <li>Você pode marcar mais de uma opção.</li>
+                </ul>
+                <img src="fotodegatofofo0.png" alt="Gato fofo" class="cat-image">
+                <button class="continue-btn" onclick="startQuestions()">Aperte aqui para continuar</button>
+            </div>
+
+            <!-- Container das perguntas -->
+            <div id="questions-container" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress"></div>
+                </div>
+                
+                <!-- Pergunta 1 -->
+                <div class="question-container" id="q1">
+                    <div class="question">
+                        <h3>Primeira pergunta: como você quer que eu fique perto de você?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q1a" name="q1" value="A">
+                                <label for="q1a">A) Olhando e Quieto</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q1b" name="q1" value="B">
+                                <label for="q1b">B) Grudado e Quieto</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q1c" name="q1" value="C">
+                                <label for="q1c">C) Olhando e Falando</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q1d" name="q1" value="D">
+                                <label for="q1d">D) Grudado e Falando</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo1.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(2)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 2 -->
+                <div class="question-container" id="q2">
+                    <div class="question">
+                        <h3>Segunda pergunta: De que lugar você mais gosta de ficar?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q2a" name="q2" value="A">
+                                <label for="q2a">A) Lugar onde mora</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q2b" name="q2" value="B">
+                                <label for="q2b">B) Escola</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q2c" name="q2" value="C">
+                                <label for="q2c">C) Outro lugar de aprendizado, tipo: Cursos, Artes Marciais</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q2d" name="q2" value="D">
+                                <label for="q2d">D) Lugar de compra</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q2e" name="q2" value="E">
+                                <label for="q2e">E) Passeio</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo2.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(3)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 3 -->
+                <div class="question-container" id="q3">
+                    <div class="question">
+                        <h3>Terceira pergunta: O quanto que você gosta de mim?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q3a" name="q3" value="A">
+                                <label for="q3a">A) Bom</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q3b" name="q3" value="B">
+                                <label for="q3b">B) LEGAL</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q3c" name="q3" value="C">
+                                <label for="q3c">C) Cara IRADO</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q3d" name="q3" value="D">
+                                <label for="q3d">D) Poucos caras são assim</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q3e" name="q3" value="E">
+                                <label for="q3e">E) Único</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo3.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(4)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 4 -->
+                <div class="question-container" id="q4">
+                    <div class="question">
+                        <h3>Quarta pergunta: Devo te presentear?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q4a" name="q4" value="A">
+                                <label for="q4a">A) Sim</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q4b" name="q4" value="B">
+                                <label for="q4b">B) Não</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo4.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion('4.5')">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 4.5 -->
+                <div class="question-container" id="q4_5">
+                    <div class="question">
+                        <h3>Quarta e meia pergunta: Qual tipo de presente?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q4_5a" name="q4_5" value="A">
+                                <label for="q4_5a">A) Descartável</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q4_5b" name="q4_5" value="B">
+                                <label for="q4_5b">B) Feito à mão</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q4_5c" name="q4_5" value="C">
+                                <label for="q4_5c">C) Comestível</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q4_5d" name="q4_5" value="D">
+                                <label for="q4_5d">D) Peças de roupa</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo4meia.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(5)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 5 -->
+                <div class="question-container" id="q5">
+                    <div class="question">
+                        <h3>Quinta pergunta: Como você quer que seja a nossa conversa?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q5a" name="q5" value="A">
+                                <label for="q5a">A) Sobre vida pessoal</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q5b" name="q5" value="B">
+                                <label for="q5b">B) Sobre anime</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q5c" name="q5" value="C">
+                                <label for="q5c">C) Sobre problemas da escola</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q5d" name="q5" value="D">
+                                <label for="q5d">D) Sobre qualquer coisa</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo5.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(6)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 6 -->
+                <div class="question-container" id="q6">
+                    <div class="question">
+                        <h3>Sexta pergunta: Você quer que nossa conversa seja aonde?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q6a" name="q6" value="A">
+                                <label for="q6a">A) Instagram</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q6b" name="q6" value="B">
+                                <label for="q6b">B) Pessoalmente</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q6c" name="q6" value="C">
+                                <label for="q6c">C) Escondido</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q6d" name="q6" value="D">
+                                <label for="q6d">D) Entre Amigos/Pessoas</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo6.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(7)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 7 -->
+                <div class="question-container" id="q7">
+                    <div class="question">
+                        <h3>Sétima pergunta: Quer que eu te trate como?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q7a" name="q7" value="A">
+                                <label for="q7a">A) Amiga (apenas conversa e apenas olhares)</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q7b" name="q7" value="B">
+                                <label for="q7b">B) Melhor amiga (conversas, piadas, Abraço/aperto de mão)</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q7c" name="q7" value="C">
+                                <label for="q7c">C) Conhecido (Troca de olhares e não conversam)</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q7d" name="q7" value="D">
+                                <label for="q7d">D) Colega (não conversando com frequência mas se olha e às vezes se ajuda)</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo7.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(8)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 8 -->
+                <div class="question-container" id="q8">
+                    <div class="question">
+                        <h3>Oitava pergunta: Quer que eu fique preocupado com você?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q8a" name="q8" value="A">
+                                <label for="q8a">A) Sim</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q8b" name="q8" value="B">
+                                <label for="q8b">B) Não</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo8.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(9)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 9 -->
+                <div class="question-container" id="q9">
+                    <div class="question">
+                        <h3>Nona pergunta: Devo ser ciumento?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q9a" name="q9" value="A">
+                                <label for="q9a">A) Sim</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q9b" name="q9" value="B">
+                                <label for="q9b">B) Não</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo9.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(10)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 10 -->
+                <div class="question-container" id="q10">
+                    <div class="question">
+                        <h3>Décima pergunta: amizades</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q10a" name="q10" value="A">
+                                <label for="q10a">A) Apenas amigas</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q10b" name="q10" value="B">
+                                <label for="q10b">B) Apenas familiares</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q10c" name="q10" value="C">
+                                <label for="q10c">C) Apenas comigo (você e eu)</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q10d" name="q10" value="D">
+                                <label for="q10d">D) Seja livre como quiser (minha amizade pode ser como eu quiser)</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q10e" name="q10" value="E">
+                                <label for="q10e">E) Você que manda no momento</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo10.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="nextQuestion(11)">Próxima pergunta</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta 11 -->
+                <div class="question-container" id="q11">
+                    <div class="question">
+                        <h3>Décima primeira pergunta: Você planeja fazer encontros comigo?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q11a" name="q11" value="A">
+                                <label for="q11a">A) Sim</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q11b" name="q11" value="B">
+                                <label for="q11b">B) Não</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q11c" name="q11" value="C">
+                                <label for="q11c">C) Talvez</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q11d" name="q11" value="D">
+                                <label for="q11d">D) Vou pensar nisso</label>
+                            </div>
+                        </div>
+                        <img src="fotodegatofofo11.png" alt="Gato fofo" class="cat-image">
+                        <button class="continue-btn" onclick="showResults()">Ver resultados</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultados -->
+            <div id="results" class="results">
+                <h2>Dados das suas respostas <span class="heart">💖</span></h2>
+                <div id="results-content"></div>
+                <img src="fotogatofofo12.png" alt="Gato fofo" class="cat-image">
+                <button class="copy-btn" onclick="copyResults()">Clique aqui para copiar e colar suas respostas</button>
+                <p><em>Obrigado por responder, minha princesa! 💕</em></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let answers = {};
+
+        function showInstructions() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('instructions').style.display = 'block';
+        }
+
+        function startQuestions() {
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('questions-container').style.display = 'block';
+            showQuestion(1);
+        }
+
+        function showQuestion(questionNum) {
+            // Esconder todas as perguntas
+            const questions = document.querySelectorAll('.question-container');
+            questions.forEach(q => q.style.display = 'none');
+            
+            // Mostrar a pergunta atual
+            const currentQ = document.getElementById('q' + questionNum);
+            if (currentQ) {
+                currentQ.style.display = 'block';
+                currentQuestion = questionNum;
+                updateProgress();
+            }
+        }
+
+        function nextQuestion(nextNum) {
+            // Salvar respostas da pergunta atual
+            saveCurrentAnswers();
+            
+            if (nextNum === '4.5') {
+                showQuestion('4_5');
+            } else {
+                showQuestion(nextNum);
+            }
+        }
+
+        function saveCurrentAnswers() {
+            let questionId = 'q' + currentQuestion;
+            if (currentQuestion === '4_5') {
+                questionId = 'q4_5';
+            }
+            
+            const checkboxes = document.querySelectorAll(`input[name="${questionId}"]:checked`);
+            const selectedValues = Array.from(checkboxes).map(cb => cb.value);
+            answers[questionId] = selectedValues;
+        }
+
+        function updateProgress() {
+            const totalQuestions = 12; // 11 perguntas + 4.5
+            let currentProgress = 0;
+            
+            if (currentQuestion === 1) currentProgress = 1;
+            else if (currentQuestion === 2) currentProgress = 2;
+            else if (currentQuestion === 3) currentProgress = 3;
+            else if (currentQuestion === 4) currentProgress = 4;
+            else if (currentQuestion === '4_5') currentProgress = 5;
+            else if (currentQuestion === 5) currentProgress = 6;
+            else if (currentQuestion === 6) currentProgress = 7;
+            else if (currentQuestion === 7) currentProgress = 8;
+            else if (currentQuestion === 8) currentProgress = 9;
+            else if (currentQuestion === 9) currentProgress = 10;
+            else if (currentQuestion === 10) currentProgress = 11;
+            else if (currentQuestion === 11) currentProgress = 12;
+            
+            const percentage = (currentProgress / totalQuestions) * 100;
+            document.getElementById('progress').style.width = percentage + '%';
+        }
+
+        function showResults() {
+            saveCurrentAnswers();
+            
+            // Verificar se pelo menos 7 perguntas foram respondidas
+            const answeredQuestions = Object.keys(answers).filter(key => answers[key].length > 0);
+            
+            if (answeredQuestions.length < 7) {
+                alert('Você precisa responder pelo menos 7 perguntas!');
+                return;
+            }
+            
+            document.getElementById('questions-container').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultsContent = document.getElementById('results-content');
+            let resultsHTML = '';
+            
+            const questionLabels = {
+                'q1': '1: Como você quer que eu fique perto de você',
+                'q2': '2: De que lugar você mais gosta de ficar',
+                'q3': '3: O quanto que você gosta de mim',
+                'q4': '4: Devo te presentear',
+                'q4_5': '4.5: Qual tipo de presente',
+                'q5': '5: Como você quer que seja a nossa conversa',
+                'q6': '6: Você quer que nossa conversa seja aonde',
+                'q7': '7: Quer que eu te trate como',
+                'q8': '8: Quer que eu fique preocupado com você',
+                'q9': '9: Devo ser ciumento',
+                'q10': '10: Amizades',
+                'q11': '11: Você planeja fazer encontros comigo'
+            };
+            
+            for (const [questionId, questionLabel] of Object.entries(questionLabels)) {
+                if (answers[questionId] && answers[questionId].length > 0) {
+                    resultsHTML += `<p><strong>${questionLabel}:</strong> ${answers[questionId].join(', ')}</p>`;
+                }
+            }
+            
+            resultsContent.innerHTML = resultsHTML;
+        }
+
+        function copyResults() {
+            const resultsContent = document.getElementById('results-content');
+            const textToCopy = resultsContent.innerText;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('Respostas copiadas para a área de transferência!');
+            }).catch(() => {
+                // Fallback para navegadores mais antigos
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Respostas copiadas para a área de transferência!');
+            });
+        }
+
+        // Adicionar efeito de hover nas opções
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
